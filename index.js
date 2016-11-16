@@ -3,7 +3,7 @@ const helper = SpotifyWebHelper();
 
 const Admin = require("firebase-admin");
 Admin.initializeApp({
-  credential: Admin.credential.cert("./mixable-4c064-firebase-adminsdk-gsn7q-bd7a3fc21c.json"),
+  credential: Admin.credential.applicationDefault(),
   databaseURL: "https://mixable-4c064.firebaseio.com"
 });
 
