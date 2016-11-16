@@ -21,15 +21,15 @@ helper.player.on('error', err => { console.log("ERROR: ", err) });
 
 helper.player.on('ready', () => {
   if (leader) {
-    statusRef.set(helper.status)
+    setStatus(helper.status)
+
     helper.player.on('status-will-change', status => {
-      console.log("SET STATUS: ", status)
-      statusRef.set(status)
+      setStatus(status)
     });
   } else {
     statusRef.on("value", function(snapshot) {
       status = snapshot.val();
-      console.log("GET STATUS: ", status)
+      displayStatus("get", status)
 
       if (status.playing) {
         helper.player.play(status.track.track_resource.uri)
@@ -42,3 +42,16 @@ helper.player.on('ready', () => {
     });
   }
 });
+
+function setStatus(status) {
+  statusRef.set(status)
+  displayStatus("set", status)
+}
+
+function displayStatus(mode, status) {
+  if (status.playing) {
+    console.log(Date.now() + " " + mode + " play " + status.track.track_resource.uri + " " + status.playing_position)
+  } else {
+    console.log(Date.now() + " " + mode + "pause")
+  }
+}
