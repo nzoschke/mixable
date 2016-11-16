@@ -1,0 +1,16 @@
+{
+  "name": "mixable",
+  "version": "1.0.0",
+  "description": "Listen with friends",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Noah Zoschke",
+  "license": "ISC",
+  "dependencies": {
+    "@jonny/spotify-web-helper": "^1.5.0",
+    "firebase-admin": "^4.0.2"
+  }
+}
