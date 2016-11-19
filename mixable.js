@@ -18,43 +18,51 @@ const Mixable = {
     spotify.player.on('error', err => { console.log("ERROR: ", err) });
     spotify.player.on('ready', () => {
       if (this.leader) {
-        this.setStatus(helper.status)
+        this.setStatus(spotify.status)
+      }
 
-        spotify.player.on('status-will-change', status => {
-          // same track, send seek only if it is a significant change
-          if (helper.status.track.track_resource.uri == status.track.track_resource.uri) {
-            if (Math.abs(helper.status.playing_position - status.playing_position) > 5) {
-              this.setStatus(status)
-            }
+      spotify.player.on('status-will-change', status => {
+        if (!this.leader) {
+          return;
+        }
+
+        // same track, send seek only if it is a significant change
+        if (spotify.status.track.track_resource.uri == status.track.track_resource.uri) {
+          if (Math.abs(spotify.status.playing_position - status.playing_position) > 5) {
+            this.setStatus(status)
+          }
+        }
+        // change tracks
+        else {
+          this.setStatus(status)
+        }
+      });
+
+      this.statusRef.on("value", (snapshot) => {
+        if (this.leader) {
+          return;
+        }
+
+        status = snapshot.val();
+        this.displayStatus("get", status)
+
+        if (status.playing) {
+          // same track, just seek
+          if (spotify.status.track.track_resource.uri == status.track.track_resource.uri) {
+            spotify.player.seekTo(status.playing_position);
           }
           // change tracks
           else {
-            this.setStatus(status)
+            spotify.player.play(status.track.track_resource.uri, (err, res) => {
+              spotify.player.seekTo(status.playing_position)
+            })
           }
-        });
-      } else {
-        this.statusRef.on("value", (snapshot) => {
-          status = snapshot.val();
-          this.displayStatus("get", status)
-
-          if (status.playing) {
-            // same track, just seek
-            if (spotify.status.track.track_resource.uri == status.track.track_resource.uri) {
-              spotify.player.seekTo(status.playing_position);
-            }
-            // change tracks
-            else {
-              spotify.player.play(status.track.track_resource.uri, (err, res) => {
-                spotify.player.seekTo(status.playing_position)
-              })
-            }
-          } else {
-            spotify.player.pause()
-          }
-        }, function (errorObject) {
-          console.log("The read failed: " + errorObject.code);
-        });
-      }
+        } else {
+          spotify.player.pause()
+        }
+      }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      });
     });
   },
 
