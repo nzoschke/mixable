@@ -52,6 +52,6 @@ function displayStatus(mode, status) {
   if (status.playing) {
     console.log(Date.now() + " " + mode + " play " + status.track.track_resource.uri + " " + status.playing_position)
   } else {
-    console.log(Date.now() + " " + mode + "pause")
+    console.log(Date.now() + " " + mode + " pause")
   }
 }
