@@ -1,13 +1,12 @@
 const SpotifyWebHelper = require('@jonny/spotify-web-helper')
 const helper = SpotifyWebHelper();
 
-const Admin = require("firebase-admin");
-Admin.initializeApp({
-  credential: Admin.credential.applicationDefault(),
-  databaseURL: "https://mixable-4c064.firebaseio.com"
-});
+const Firebase = require('firebase');
+const app = Firebase.initializeApp({
+  databaseURL: "https://mixable-4c064.firebaseio.com",
+})
 
-const db = Admin.database();
+const db = app.database();
 const statusRef = db.ref("status");
 
 const leader = process.argv[2] == "--leader"
