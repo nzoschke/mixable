@@ -23,7 +23,16 @@ helper.player.on('ready', () => {
     setStatus(helper.status)
 
     helper.player.on('status-will-change', status => {
-      setStatus(status)
+      // same track, send seek only if it is a significant change
+      if (helper.status.track.track_resource.uri == status.track.track_resource.uri) {
+        if (Math.abs(helper.status.playing_position - status.playing_position) > 5) {
+          setStatus(status)
+        }
+      }
+      // change tracks
+      else {
+        setStatus(status)
+      }
     });
   } else {
     statusRef.on("value", function(snapshot) {
