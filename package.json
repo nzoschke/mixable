@@ -4,6 +4,8 @@
   "description": "Listen with friends",
   "main": "index.js",
   "scripts": {
+    "dist": "build",
+    "pack": "build --dir",
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +17,14 @@
   },
   "devDependencies": {
     "electron": "^1.4.1"
+  },
+  "build": {
+    "appId": "net.mixable.app",
+    "mac": {
+      "category": "your.app.category.type"
+    },
+    "win": {
+      "iconUrl": "(windows-only) https link to icon"
+    }
   }
 }
