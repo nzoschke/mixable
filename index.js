@@ -16,6 +16,10 @@ if (leader) {
   console.log("Following the session.")
 }
 
+const db = firebase.database();
+
+const statusRef = db.ref('status');
+
 helper.player.on('error', err => { console.log("ERROR: ", err) });
 
 helper.player.on('ready', () => {
@@ -31,8 +35,16 @@ helper.player.on('ready', () => {
       displayStatus("get", status)
 
       if (status.playing) {
-        helper.player.play(status.track.track_resource.uri)
-        helper.player.seekTo(status.playing_position)
+        // same track, just seek
+        if (helper.status.track.track_resource.uri == status.track.track_resource.uri) {
+          helper.player.seekTo(status.playing_position);
+        }
+        // change tracks
+        else {
+          helper.player.play(status.track.track_resource.uri, (err, res) => {
+            helper.player.seekTo(status.playing_position)
+          })
+        }
       } else {
         helper.player.pause()
       }
