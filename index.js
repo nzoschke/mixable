@@ -10,7 +10,8 @@ app.on('ready', function(){
   win = new BrowserWindow({show: false});
   appIcon = new Tray(iconPath);
   var contextMenu = Menu.buildFromTemplate([
-    { label: 'Quit',
+    {
+      label: 'Quit',
       accelerator: 'Command+Q',
       selector: 'terminate:',
     }
