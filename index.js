@@ -16,10 +16,6 @@ if (leader) {
   console.log("Following the session.")
 }
 
-const db = firebase.database();
-
-const statusRef = db.ref('status');
-
 helper.player.on('error', err => { console.log("ERROR: ", err) });
 
 helper.player.on('ready', () => {
