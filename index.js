@@ -4,6 +4,10 @@ const Mixable = require("./mixable.js");
 
 const iconPath = path.join(__dirname, 'icon.png');
 
+// causes a short flip in the doc, but this is the only way so far
+// see: https://github.com/electron/electron/issues/422
+app.dock.hide();
+
 app.on('ready', function(){
   const appIcon = new Tray(iconPath);
 
