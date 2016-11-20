@@ -22,7 +22,7 @@ app.on('ready', function(){
   function buildMenu() {
     return Menu.buildFromTemplate([
       {
-        label: Mixable.leader ? '✓ Leader' : 'Leader',
+        label: Mixable.leader ? '✓ Leader' : 'Lead session',
         click: () => Mixable.setLeader(!Mixable.leader, false)
       },
       {
