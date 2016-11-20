@@ -1,4 +1,4 @@
-const {app, Tray, Menu} = require('electron');
+const {app, Tray, Menu, BrowserWindow} = require('electron');
 const path = require('path');
 const Mixable = require("./mixable.js");
 
@@ -8,8 +8,11 @@ const iconPath = path.join(__dirname, 'icon.png');
 // see: https://github.com/electron/electron/issues/422
 app.dock.hide();
 
+let win = null;
+
 app.on('ready', function(){
   const appIcon = new Tray(iconPath);
+  win = new BrowserWindow({ show: false });
 
   function toggleLeader() {
     Mixable.leader = !Mixable.leader;
@@ -27,6 +30,13 @@ app.on('ready', function(){
       {
         label: Mixable.leader ? '✓ Leader' : 'Leader',
         click: toggleLeader,
+      },
+      {
+        label: "Debug mode",
+        click: () => {
+          win.show();
+          win.toggleDevTools();
+        }
       },
       {
         label: 'Quit',
