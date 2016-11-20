@@ -27,7 +27,7 @@ const Mixable = {
 
       this.leader = false;
       win.webContents.send("notifications", {
-        title: `Now listening to ${snapshot.val().name}:`
+        title: `Now listening to ${snapshot.val().name}`
       });
     })
 
