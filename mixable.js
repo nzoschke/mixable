@@ -84,7 +84,7 @@ const Mixable = {
           }
           // change tracks
           else {
-            spotify.player.play(status.track.track_resource.uri, (err, res) => {
+            spotify.player.play(status.track.track_resource.uri, status.context).then((res) => {
               spotify.player.seekTo(status.playing_position)
             })
           }
@@ -109,7 +109,14 @@ const Mixable = {
 
   becomeLeaderAndPlay: function(uri) {
     this.setLeader(true);
-    this.spotify.player.play(uri);
+
+    this.spotify.player.play(uri, uri).then((res) => {
+      if (uri.includes("/playlist/")) {
+        res.context = uri
+        console.log(res)
+        this.refStatus.set(res)
+      }
+    });
   },
 
   setStatus: function(status) {
