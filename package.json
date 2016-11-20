@@ -1,6 +1,6 @@
 {
-  "name": "mixable",
-  "version": "1.0.0",
+  "name": "Mixable",
+  "version": "0.2.0",
   "description": "Listen with friends",
   "main": "index.js",
   "scripts": {
