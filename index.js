@@ -42,7 +42,6 @@ app.on('ready', function(){
   }
 
   Mixable.run(win);
-
   appIcon.setToolTip('Mixable');
   appIcon.setContextMenu(buildMenu());
 });

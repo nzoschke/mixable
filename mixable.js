@@ -5,6 +5,8 @@ const { ipcMain } = require('electron');
 const Mixable = {
   leader: false,
 
+  name: process.env['USER'],
+
   run: function(win) {
     win.webContents.on('did-finish-load', () => {
       this.initialize(win)
@@ -25,10 +27,18 @@ const Mixable = {
     this.refLeader.on("value", (snapshot) => {
       if (!snapshot.val()) return;
 
-      this.leader = false;
-      win.webContents.send("notifications", {
-        title: `Now listening to ${snapshot.val().name}`
-      });
+      if (snapshot.val().name == this.name) {
+        this.leader = true
+        win.webContents.send("notifications", {
+          title: "You are now leading this session"
+        });
+      }
+      else {
+        this.leader = false;
+        win.webContents.send("notifications", {
+          title: `Now listening to ${snapshot.val().name}`
+        });
+      }
     })
 
     this.refStatus = db.ref("status");
@@ -41,6 +51,7 @@ const Mixable = {
 
       spotify.player.on('status-will-change', status => {
         if (!this.leader) {
+          console.log('not leading, ignoring');
           return;
         }
 
@@ -58,6 +69,7 @@ const Mixable = {
 
       this.refStatus.on("value", (snapshot) => {
         if (this.leader) {
+          console.log('currently leader, ignoring');
           return;
         }
 
@@ -85,8 +97,8 @@ const Mixable = {
   },
 
   toggleLeader: function() {
-    this.leader = !this.leader
-    this.refLeader.set({ name: process.env['USER'] })
+    this.leader = !this.leader;
+    this.refLeader.set({ name: this.name })
   },
 
   setStatus: function(status) {
