@@ -28,13 +28,13 @@ const Mixable = {
       if (!snapshot.val()) return;
 
       if (snapshot.val().name == this.name) {
-        this.leader = true
+        this.setLeader(true);
         win.webContents.send("notifications", {
           title: "You are now leading this session"
         });
       }
       else {
-        this.leader = false;
+        this.setLeader(false);
         win.webContents.send("notifications", {
           title: `Now listening to ${snapshot.val().name}`
         });
@@ -96,9 +96,14 @@ const Mixable = {
     });
   },
 
-  toggleLeader: function() {
-    this.leader = !this.leader;
-    this.refLeader.set({ name: this.name })
+  setLeader: function(val, runCallback = true) {
+    this.leader = val;
+    if (val) {
+      this.refLeader.set({ name: this.name })
+    }
+    if (runCallback) {
+      this.onLeaderChange();
+    }
   },
 
   setStatus: function(status) {

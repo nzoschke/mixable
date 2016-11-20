@@ -15,8 +15,7 @@ app.on('ready', function(){
   let win = new BrowserWindow({ show: false })
   win.loadURL(`file://${__dirname}/index.html`)
 
-  function toggleLeader() {
-    Mixable.toggleLeader()
+  function updateMenu() {
     appIcon.setContextMenu(buildMenu())
   }
 
@@ -24,7 +23,7 @@ app.on('ready', function(){
     return Menu.buildFromTemplate([
       {
         label: Mixable.leader ? '✓ Leader' : 'Leader',
-        click: toggleLeader,
+        click: () => Mixable.setLeader(!Mixable.leader, false)
       },
       {
         label: "Debug mode",
@@ -41,6 +40,7 @@ app.on('ready', function(){
     ]);
   }
 
+  Mixable.onLeaderChange = updateMenu;
   Mixable.run(win);
   appIcon.setToolTip('Mixable');
   appIcon.setContextMenu(buildMenu());
