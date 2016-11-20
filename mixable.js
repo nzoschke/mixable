@@ -15,6 +15,7 @@ const Mixable = {
 
   initialize: function(win) {
     let spotify = SpotifyWebHelper();
+    this.spotify = spotify;
 
     let app = Firebase.initializeApp({
       databaseURL: "https://mixable-4c064.firebaseio.com",
@@ -104,6 +105,11 @@ const Mixable = {
     if (runCallback) {
       this.onLeaderChange();
     }
+  },
+
+  becomeLeaderAndPlay: function(uri) {
+    this.setLeader(true);
+    this.spotify.player.play(uri);
   },
 
   setStatus: function(status) {

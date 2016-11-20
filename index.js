@@ -44,4 +44,11 @@ app.on('ready', function(){
   Mixable.run(win);
   appIcon.setToolTip('Mixable');
   appIcon.setContextMenu(buildMenu());
+
+  appIcon.on('drop-text', function(event, text) {
+    console.log(text);
+    if (text.includes("https://open.spotify.com")) {
+      Mixable.becomeLeaderAndPlay(text);
+    }
+  });
 });
