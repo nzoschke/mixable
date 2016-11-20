@@ -20,7 +20,18 @@ const Mixable = {
 
     let db = app.database();
 
-    this.statusRef = db.ref("status");
+    this.refLeader = db.ref("leader");
+
+    this.refLeader.on("value", (snapshot) => {
+      if (!snapshot.val()) return;
+
+      this.leader = false;
+      win.webContents.send("notifications", {
+        title: `Now listening to ${snapshot.val().name}:`
+      });
+    })
+
+    this.refStatus = db.ref("status");
 
     spotify.player.on('error', err => { console.log("ERROR: ", err) });
     spotify.player.on('ready', () => {
@@ -45,17 +56,9 @@ const Mixable = {
         }
       });
 
-      let currentSnapshot = null;
-      this.statusRef.on("value", (snapshot) => {
+      this.refStatus.on("value", (snapshot) => {
         if (this.leader) {
           return;
-        }
-
-        if (!currentSnapshot || snapshot.val().dj != currentSnapshot.dj) {
-          win.webContents.send('test', {
-            title: `Now listening to ${snapshot.val().dj}:`,
-            body: spotify.status.track.track_resource.uri
-          });
         }
 
         status = snapshot.val();
@@ -75,17 +78,19 @@ const Mixable = {
         } else {
           spotify.player.pause()
         }
-
-        currentSnapshot = snapshot.val();
       }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
       });
     });
   },
 
+  toggleLeader: function() {
+    this.leader = !this.leader
+    this.refLeader.set({ name: process.env['USER'] })
+  },
+
   setStatus: function(status) {
-    status.dj = process.env['USER'];
-    this.statusRef.set(status)
+    this.refStatus.set(status)
     this.displayStatus("set", status)
   },
 

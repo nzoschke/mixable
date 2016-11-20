@@ -16,13 +16,7 @@ app.on('ready', function(){
   win.loadURL(`file://${__dirname}/index.html`)
 
   function toggleLeader() {
-    Mixable.leader = !Mixable.leader;
-    if (Mixable.leader) {
-      console.log('now leading');
-    }
-    else {
-      console.log('now listening');
-    }
+    Mixable.toggleLeader()
     appIcon.setContextMenu(buildMenu())
   }
 
