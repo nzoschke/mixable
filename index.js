@@ -12,7 +12,8 @@ let win = null;
 
 app.on('ready', function(){
   const appIcon = new Tray(iconPath);
-  win = new BrowserWindow({ show: false });
+  let win = new BrowserWindow({ show: false })
+  win.loadURL(`file://${__dirname}/index.html`)
 
   function toggleLeader() {
     Mixable.leader = !Mixable.leader;
@@ -46,7 +47,7 @@ app.on('ready', function(){
     ]);
   }
 
-  Mixable.run();
+  Mixable.run(win);
 
   appIcon.setToolTip('Mixable');
   appIcon.setContextMenu(buildMenu());

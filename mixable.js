@@ -1,10 +1,17 @@
 const Firebase = require('firebase');
 const SpotifyWebHelper = require('@jonny/spotify-web-helper')
+const { ipcMain } = require('electron');
 
 const Mixable = {
   leader: false,
 
-  run: function() {
+  run: function(win) {
+    win.webContents.on('did-finish-load', () => {
+      this.initialize(win)
+    })
+  },
+
+  initialize: function(win) {
     let spotify = SpotifyWebHelper();
 
     let app = Firebase.initializeApp({
@@ -38,9 +45,17 @@ const Mixable = {
         }
       });
 
+      let currentSnapshot = null;
       this.statusRef.on("value", (snapshot) => {
         if (this.leader) {
           return;
+        }
+
+        if (!currentSnapshot || snapshot.val().dj != currentSnapshot.dj) {
+          win.webContents.send('test', {
+            title: `Now listening to ${snapshot.val().dj}:`,
+            body: spotify.status.track.track_resource.uri
+          });
         }
 
         status = snapshot.val();
@@ -60,6 +75,8 @@ const Mixable = {
         } else {
           spotify.player.pause()
         }
+
+        currentSnapshot = snapshot.val();
       }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
       });
@@ -67,6 +84,7 @@ const Mixable = {
   },
 
   setStatus: function(status) {
+    status.dj = process.env['USER'];
     this.statusRef.set(status)
     this.displayStatus("set", status)
   },
