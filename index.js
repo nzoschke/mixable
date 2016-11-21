@@ -42,6 +42,8 @@ app.on('ready', function(){
 
   Mixable.onLeaderChange = updateMenu;
   Mixable.run(win);
+
+  // not working currently, see: https://github.com/electron/electron/issues/3599
   appIcon.setToolTip('Mixable');
   appIcon.setContextMenu(buildMenu());
 
