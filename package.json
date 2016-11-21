@@ -1,10 +1,12 @@
 {
-  "name": "mixable",
-  "version": "1.0.0",
+  "name": "Mixable",
+  "version": "0.2.0",
   "description": "Listen with friends",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "dist": "build",
+    "pack": "build --dir",
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Noah Zoschke",
@@ -12,5 +14,17 @@
   "dependencies": {
     "@jonny/spotify-web-helper": "^1.5.0",
     "firebase": "^3.6.1"
+  },
+  "devDependencies": {
+    "electron": "^1.4.1"
+  },
+  "build": {
+    "appId": "net.mixable.app",
+    "mac": {
+      "category": "your.app.category.type"
+    },
+    "win": {
+      "iconUrl": "(windows-only) https link to icon"
+    }
   }
 }
